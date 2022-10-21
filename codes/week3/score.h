@@ -1,0 +1,1 @@
+double addAll(double scores[], int length);
