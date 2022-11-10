@@ -87,6 +87,8 @@ int main(){
             calc_applicationDevelopmentWithDotNET();
         else if(input == 4)
             calc_fundamentalsOfInteractionDesign();
+        else if(input == 5)
+            break;
         else
             cout << "\a\n\033[1;31m[Warning] invalid input\033[0m\n\n"; // invalid input
         cout << menuText << "Enter 1 to 5 => ";
