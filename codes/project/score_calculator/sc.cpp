@@ -1,8 +1,14 @@
 #include <iostream>
 #include <stdlib.h>
+#include <unistd.h>
+#include <fstream>
 using std::cout;
 using std::cin;
 using std::string;
+using std::endl;
+
+// global variable
+string studentNumber;
 
 double totalSum(double* scores, int length){
     double total = 0;
@@ -22,7 +28,7 @@ double scoreCalculator(const char* txt, int count, int weight, double maxScore){
     delete []scores;
     return sum * weight / maxScore;
 }
-void result(double score){
+string result(double score){
     string result;
     if(score >= 85)
         result = "HD";
@@ -36,9 +42,27 @@ void result(double score){
         result = "Fail";
     if(result == "Fail"){
         cout << "\n\033[1;31mResult: " << result << " [score: " << score << "]\033[0m\n\n"; // print red text
-        return;    
+        return result;    
     }
     cout << "\n\033[1;32mResult: " << result << " [score: " << score << "]\033[0m\n\n"; // print green text
+
+    return result;
+}
+void save_scoreResult(string fileName ,string header, string body){
+    /*
+    계산 되어진 결과를 사용자가 입력한 파일의 이름에다가 저장한다
+    */   
+    
+    // 파일이 사전에 존재하면 내용을 추가하도록 함
+    std::ofstream st(fileName, std::ios_base::app);
+    // 파일에 내용 저장
+    // header 저장
+    st << header << endl;
+    // body 저장
+    st << body << endl;
+    st << endl;
+    // 저장 종료
+    cout << "saved" << endl;
 }
 void calc_softwareArchitecture(){
     double saScores = 0;
@@ -47,14 +71,20 @@ void calc_softwareArchitecture(){
     saScores += scoreCalculator("\nenter assignment2 scores", 2, 15, 20);
     saScores += scoreCalculator("\nenter assignment3 score", 1, 45, 45);
     saScores += scoreCalculator("\nenter assignment 4 scores", 4, 20, 20);
-    result(saScores);
+    string score = result(saScores);
+    string body = "result: " + score;
+    string fileName = studentNumber + "_score.txt";
+    save_scoreResult(fileName, "Software Architecture", body);
 }
 void calc_mathematics(){
     double mathScores = 0;
     cout << "\nMathematics Score\n";
     mathScores = scoreCalculator("\nenter skill test scores", 10, 50, 50);
     mathScores += scoreCalculator("\nenter final exam score", 1, 50, 80);
-    result(mathScores);
+    string score = result(mathScores);
+    string body = "result: " + score;
+    string fileName = studentNumber + "_score.txt";
+    save_scoreResult(fileName, "Mathematics 1", body);
 }
 void calc_applicationDevelopmentWithDotNET(){
     double applicationScores = 0;
@@ -62,7 +92,10 @@ void calc_applicationDevelopmentWithDotNET(){
     applicationScores = scoreCalculator("\nenter quizzes scores", 5, 30, 30);
     applicationScores += scoreCalculator("\nenter assignment-1 score", 1, 35, 35);
     applicationScores += scoreCalculator("\nenter assignment-2 score", 1, 35, 35);
-    result(applicationScores);
+    string score = result(applicationScores);
+    string body = "result: " + score;
+    string fileName = studentNumber + "_score.txt";
+    save_scoreResult(fileName, "Application Development with .NET", body);
 }
 void calc_fundamentalsOfInteractionDesign(){
     double interactionDesignScores = 0;
@@ -70,10 +103,17 @@ void calc_fundamentalsOfInteractionDesign(){
     interactionDesignScores = scoreCalculator("\nenter assessment 1 score", 1, 20, 20);
     interactionDesignScores += scoreCalculator("\nenter assessment 2 score", 1, 35, 35);
     interactionDesignScores += scoreCalculator("\nenter assessment 3 score\n- persona\n- paper prototype\n- design in action video\n", 3, 45, 45);
-    result(interactionDesignScores);
+    string score = result(interactionDesignScores);
+    string body = "result: " + score;
+    string fileName = studentNumber + "_score.txt";
+    save_scoreResult(fileName, "Fundamentals of Interaction Design", body);
 }
 int main(){
     system("clear"); // clear the consoles
+    cout << "Enter your student number please: ";
+    cin >> studentNumber;
+    system("clear");
+    cout << "Student Number: " << studentNumber << endl << endl;
     int input = 0;
     const char* menuText = "1 (Software Architecture)\n2 (Mathematics)\n3 (Application development with .NET)\n4 (Fundamentals of Interaction Design)\n5 (Exit)\n";
     cout << menuText << "Enter 1 to 5 => ";

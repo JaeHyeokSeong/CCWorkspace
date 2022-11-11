@@ -1,0 +1,12 @@
+Software Architecture
+result: D
+
+Mathematics 1
+result: D
+
+Application Development with .NET
+result: HD
+
+Fundamentals of Interaction Design
+result: D
+
