@@ -21,8 +21,22 @@ double scoreCalculator(const char* txt, int count, int weight, double maxScore){
     double* scores = new double[count];
     cout << txt << '\n';
     for(int i = 0; i < count; i++){
+        string input = "";
+        double converted_inputResult;
+        char* end;
         cout << "Enter score: ";
-        cin >> scores[i];        
+        cin >> input;
+        /*
+        strtod 에서 성공적으로 변환을 하면 *end 에 널 값이 들어간다
+        이때 널 값은 십진수로 보면 0 이랑 같다
+        */
+        converted_inputResult = strtod(input.c_str(), &end);
+        if((*end!=0) && ((int)*end < 48 || (int)*end>57)){
+            cout << "\a\033[1;31minvalid input\033[0m\n" << endl;
+            i--;
+            continue;
+        }
+        scores[i] = converted_inputResult;
     }
     double sum = totalSum(scores, count);   
     delete []scores;
@@ -62,51 +76,65 @@ void save_scoreResult(string fileName ,string header, string body){
     st << body << endl;
     st << endl;
     // 저장 종료
-    cout << "saved" << endl;
+    cout << "saved" << endl << endl;
+}
+void ask_toSave(string header, string body){
+    string input;
+    bool status = true;
+    do{
+        cout << "do you want to save the result? (y/n)" << endl;
+        cin >> input;
+        if(input.length() > 1 || (input[0] != 'y' && input[0] != 'n')){
+            cout << "\a\n\033[1;31minvalid input\033[0m" << endl;
+        } else{
+            status = false;
+        }
+    }while(status);
+    
+    if(input[0] == 'y'){
+        string fileName = studentNumber + "_score.txt";
+        save_scoreResult(fileName, header, body);
+    }
 }
 void calc_softwareArchitecture(){
     double saScores = 0;
     cout << "\nSoftware Architecture Score\n";
-    saScores = scoreCalculator("\nenter assignment1 scores", 6, 20, 60);
-    saScores += scoreCalculator("\nenter assignment2 scores", 2, 15, 20);
-    saScores += scoreCalculator("\nenter assignment3 score", 1, 45, 45);
-    saScores += scoreCalculator("\nenter assignment 4 scores", 4, 20, 20);
+    saScores = scoreCalculator("\nenter assignment1 scores\n- quiz1\n- quiz2\n- quiz3\n- quiz4\n- quiz5\n- quiz6", 6, 20, 60);
+    saScores += scoreCalculator("\nenter assignment2 scores\n- two elective topics quizzes", 2, 15, 20);
+    saScores += scoreCalculator("\nenter assignment3 score\n- team project", 1, 45, 45);
+    saScores += scoreCalculator("\nenter assignment 4 scores\n- peer review1\n- peer review2\n- peer review3\n- peer review4", 4, 20, 20);
     string score = result(saScores);
     string body = "result: " + score;
-    string fileName = studentNumber + "_score.txt";
-    save_scoreResult(fileName, "Software Architecture", body);
+    ask_toSave("Subject: Software Architect", body);
 }
 void calc_mathematics(){
     double mathScores = 0;
     cout << "\nMathematics Score\n";
-    mathScores = scoreCalculator("\nenter skill test scores", 10, 50, 50);
-    mathScores += scoreCalculator("\nenter final exam score", 1, 50, 80);
+    mathScores = scoreCalculator("\nenter skill test scores\n- skill test1\n- skill test2\n- skill test3\n- skill test4\n- skill test5\n- skill test6\n- skill test7\n- skill test8\n- skill test9\n- skill test10", 10, 50, 50);
+    mathScores += scoreCalculator("\nenter final exam score\n- final exam", 1, 50, 80);
     string score = result(mathScores);
     string body = "result: " + score;
-    string fileName = studentNumber + "_score.txt";
-    save_scoreResult(fileName, "Mathematics 1", body);
+    ask_toSave("Subject: Mathematics 1", body);
 }
 void calc_applicationDevelopmentWithDotNET(){
     double applicationScores = 0;
     cout << "\nApplication Development with .NET score\n";
-    applicationScores = scoreCalculator("\nenter quizzes scores", 5, 30, 30);
+    applicationScores = scoreCalculator("\nenter quizzes scores\n- quiz1\n- quiz2\n- quiz3\n- quiz4\n- quiz5", 5, 30, 30);
     applicationScores += scoreCalculator("\nenter assignment-1 score", 1, 35, 35);
     applicationScores += scoreCalculator("\nenter assignment-2 score", 1, 35, 35);
     string score = result(applicationScores);
     string body = "result: " + score;
-    string fileName = studentNumber + "_score.txt";
-    save_scoreResult(fileName, "Application Development with .NET", body);
+    ask_toSave("Application Development with .NET", body);
 }
 void calc_fundamentalsOfInteractionDesign(){
     double interactionDesignScores = 0;
     cout << "\nFundamentals of Interaction Design score\n";
-    interactionDesignScores = scoreCalculator("\nenter assessment 1 score", 1, 20, 20);
-    interactionDesignScores += scoreCalculator("\nenter assessment 2 score", 1, 35, 35);
+    interactionDesignScores = scoreCalculator("\nenter assessment 1 score\n- journal entry4", 1, 20, 20);
+    interactionDesignScores += scoreCalculator("\nenter assessment 2 score\n- examination", 1, 35, 35);
     interactionDesignScores += scoreCalculator("\nenter assessment 3 score\n- persona\n- paper prototype\n- design in action video\n", 3, 45, 45);
     string score = result(interactionDesignScores);
     string body = "result: " + score;
-    string fileName = studentNumber + "_score.txt";
-    save_scoreResult(fileName, "Fundamentals of Interaction Design", body);
+    ask_toSave("Fundamentals of Interaction Design", body);
 }
 int main(){
     system("clear"); // clear the consoles
