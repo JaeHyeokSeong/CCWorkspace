@@ -44,5 +44,6 @@ int main(){
     std::cout << "node 3 그리고 node 6 의 연결성 : " << findParent(parent_node, 3, 6) << '\n';
     std::cout << "node 2 그리고 node 6 의 연결성 : " << findParent(parent_node, 2, 6) << '\n';
     std::cout << "node 1 그리고 node 7 의 연결성 : " << findParent(parent_node, 1, 7) << '\n';
+    std::cout << "node 2 그리고 node 5 의 연결성 : " << findParent(parent_node, 2, 5) << '\n';
     return 0;
 }
