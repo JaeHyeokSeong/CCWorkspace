@@ -21,7 +21,7 @@ void floyd_warshall(int nodes[][nodes_number]){
             if(k == i) continue; // 거쳐갈때 자기 자신을 거쳐서 갈필요는 없다
             for(int j = 0; j < nodes_number; j++){
                 if(d[i][j] > d[i][k] + d[k][j])
-                    d[i][j] = d[i][k] + d[k][j];
+                    d[i][j] = d[i][k] + d[k][j]; // 더 적은 비용으로 갱신 시켜준다
             }
         }
     }
