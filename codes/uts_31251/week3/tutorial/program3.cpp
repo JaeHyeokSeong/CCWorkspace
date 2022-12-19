@@ -29,8 +29,11 @@ int main(){
     // for(std::vector<Product>::iterator it = products.begin(); it != products.end(); it++){
     //     std::cout << it->get_product_id() << ", " << it->get_product_name() << '\n';
     // }
-    for(auto it = products.begin(); it != products.end(); it++){
-        std::cout << it->get_product_id() << ' ' << it->get_product_name() << '\n';
+    // for(auto it = products.begin(); it != products.end(); it++){
+    //     std::cout << it->get_product_id() << ' ' << it->get_product_name() << '\n';
+    // }
+    for(std::vector<Product>::iterator it = products.begin(); it != products.end(); it++){
+        std::cout << it->get_product_id() << (*it).get_product_name() << '\n';
     }
     return 0;
 }
