@@ -123,13 +123,62 @@ void remove(const int key){
 
 // search 구현
 // 찾으면 찾은 key, value 출력, 못찾으면 error message 출력
-void search(){
-    
+void search(int key){
+    int hash_index = hash_function(key);
+    Node* node = hash_table[hash_index].head;
+
+    if(node ==  NULL){
+        std::cout << "\nno key found\n";
+        return;
+    }
+
+    while(node != NULL){
+        if(node->key == key){
+            std::cout << "\nkey found => key: " << node->key << ", value: " << node->value << '\n';
+            return;
+        }
+        node = node->next;
+    }    
+    // hash_index 에 들어가서 찾아 봤는데 원하던 key 값은 존재하지 않은 경우
+    std::cout << "not key found\n";
 }
 
+void display(){
+    for(int i = 0; i < SIZE; i++){
+        Node* node = hash_table[i].head;
+        if(node == NULL){
+            std::cout << "hash_index: " << i << " => empty\n";
+            continue;
+        }
+        std::cout << "hash_index: " << i << " =>";
+        while(node != NULL){
+            std::cout << " [key: " << node->key << ", value: " << node->value << ']';
+            node = node->next;
+        }
+        std::cout << '\n';
+    } 
+    std::cout << "\n\n";
+}
 int main(){
     hash_table = new Bucket[SIZE];
 
+    insert(0, 1);
+    insert(1, 10);
+    insert(11, 90);
+    insert(21, 64);
+    insert(31, 23);
+    insert(6, 25);
+    insert(97, 4);
+
+    display();
+
+    remove(31);
+    remove(11);
+
+    display();
+
+    search(6);
+    search(100);
     delete[] hash_table;
     return 0;
 }
