@@ -1,3 +1,6 @@
+/*
+참고자료: https://cafe.naver.com/honeyc/46342
+*/
 #ifndef BST_HPP
 #define BST_HPP
 #include <iostream>
@@ -47,25 +50,20 @@ class Bst{
         ~Bst(){
             delete_memory_allocation(root);
         }
-        std::pair<Node*, Node*> search(int key){
+        Node* get_root() const{
+            return this->root;
+        }
+        Node* search(int key){
             Node* current_node = root;
-            Node* privous_node = NULL;
             while(current_node != NULL){
                 if(current_node->key == key)
-                    break;
-                else if(current_node->key < key){
-                    privous_node = current_node;
+                    return current_node;
+                else if(current_node->key < key)
                     current_node = current_node->right_node;
-                }
-                else if(current_node->key > key){
-                    privous_node = current_node;
+                else if(current_node->key > key)
                     current_node = current_node->left_node;
-                }
             }
-            // first - parent node address
-            // second - child node address
-            // if current_node is NULL, then the key is not found
-            return std::make_pair(privous_node, current_node);
+            return current_node;
         }
         void insert(int key){
             Node* new_node = get_new_node(key);
@@ -95,57 +93,56 @@ class Bst{
                 }
             }
         }
-        void remove(int key){
-            // 먼저 값이 존재 하는지 search 함수를 통해서 찾아본다
-            // first - parent node address
-            // second - key 값이 발견되어진 노드의 주소
-            // 만약 second 노드가 NULL 이면 key 값이 발견안된 의미
-            // std::pair<Node*, Node*> node = search(key);
-            // if(node.second == NULL){
-            //     printf("remove fail => key [%d] is not exist\n", key);
-            //     return;
-            // }
-            // // 1 삭제할 노드가 leaf node 인 경우 (그냥 삭제하면 된다)
-            // if(node.second->left_node == NULL && node.second->right_node == NULL){
-            //     // 원소가 한개만 있는 경우 (root 노드 1개만 있는 경우)
-            //     if(node.first == NULL){
-            //         delete node.second;
-            //         return;
-            //     } else {
-            //         // 삭제 되는 것이 부모노드에서 왼쪽인지 오른쪽인지 알아야함
-            //         // 왼쪽 노드를 삭제하는 경우
-            //         if(node.first->key > key)
-            //             node.first->left_node = NULL;
-            //         else if(node.first->key < key)
-            //             node.first->right_node = NULL;
-            //         delete node.second;
-            //     }
-            // }
-            
-            // 3 삭제할 노드에 자식이 둘 있는 경우
-            // if(node.second->left_node != NULL && node.second->right_node != NULL){
-            //     // Node* successor_node = find_min_value(node.second->right_node);
-            //     // int tmp_key = node.second->key;
-            //     // node.second->key = successor_node->key;
-            //     // successor_node->key = tmp_key;
+        Node* remove(Node* node, int key){
+            Node* tmp_node = NULL;
+            // key 값이 들어오면 먼저 값이 존재하는지 부터 확인한다.
+            // binary search tree 안이 empty가 아닌 경우
+            if(node){
+                if(node->key == key){
+                    // [1] 삭제할 노드에 자식이 없는 경우
+                    if(node->left_node == NULL && node->right_node == NULL){
+                        // 원소가 하나만 있었는데 삭제하는 경우
+                        if(root == node)
+                            root = NULL;
+                        delete node;
+                        return NULL;
+                    } else{
+                        // [2] 자식이 하나인 경우
+                        /* 원소가 2개만 있는 경우에서 root 값을 지우는 경우, 
+                        자식 노드를 root 로 업데이트 시켜줘야 한다*/
+                        // [2] - 1 오른쪽 자식만 있는 경우
+                        if(node->left_node == NULL){
+                            tmp_node = node->right_node;
+                            if(node == root)
+                                root = tmp_node;
+                            delete node;
+                            return tmp_node;
+                        } 
+                        // [2] - 2 왼쪽 자식만 있는 경우
+                        if(node->right_node == NULL){
+                            tmp_node = node->left_node;
+                            if(node == root)
+                                root = tmp_node;
+                            delete node;
+                            return tmp_node;
+                        }
 
-            //     // Node* tmp_node = search() 
-            // }
-
-            // 2 삭제할 노드에 자식이 하나만 있는 경우)
-            // if(node.second->left_node != NULL || node.second->right_node != NULL){
-            //     // 삭제할 노드의 자식 노드를 잠시 보관해둔다
-            //     Node* tmp_node = node.second->left_node;
-            //     if(node.second->left_node == NULL)
-            //         tmp_node = node.second->right_node;
-
-            //     if(node.first->key > key){
-            //         node.first->left_node = tmp_node;
-            //     } else{
-            //         node.first->right_node = tmp_node;
-            //     }
-            //     delete node.second;
-            // }
+                        // 자식 노드가 두개인 경우
+                        // 현재 노드의 오른쪽 노드들 중에서 가장 작은 값의 노드 주소를 가져온다
+                        tmp_node = find_min_value(node->right_node);
+                        // 오른쪽 노드들 중에서 가장 작은 값을 삭제할려는 노드 값에 대입
+                        node->key = tmp_node->key; 
+                        node->right_node = remove(node->right_node, tmp_node->key); 
+                        }
+                } else{
+                    if(node->key > key){
+                        node->left_node = remove(node->left_node, key);
+                    } else{
+                        node->right_node = remove(node->right_node, key);
+                    }
+                }
+            }
+            return node;
         }
         void display(){
             inorder_traversal(root);

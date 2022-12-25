@@ -1,36 +1,41 @@
 #include <iostream>
+#include <stdlib.h>
 #include "bst.hpp"
 
 int main(){
     Bst bst;
-    bst.insert(50);
-    bst.insert(15);
-    bst.insert(62);
-    bst.insert(80);
-    bst.insert(7);
-    bst.insert(54);
-    bst.insert(11);
-    bst.display();
+    int a = 0, key;
 
-    std::pair<Node*, Node*> node = bst.search(54);
-    std::cout << "parent key: " << node.first->key << '\n';
-    std::cout << "current key: " << node.second->key << '\n';
+    while(1){
+        printf("1 - insert, 2 - search, 3 - remove, 4 - display, 5 - clear, 6 - end\n값을 입력해주세요 => ");
+        scanf("%d", &a);
+        if(a == 1){
+            printf("삽입할 값을 대입해주세요: ");
+            scanf("%d", &key);
+            bst.insert(key);
+        } else if(a == 2){
+            printf("검색할 값을 대입해주세요: ");
+            scanf("%d", &key);
+            Node* node = bst.search(key);
+            if(node)
+                printf("key [%d] 발견됨\n", key);
+            else
+                printf("key [%d] 발견안됨\n", key);
+        } else if(a == 3){
+            printf("지울값을 대입해주세요: ");
+            scanf("%d", &key);
+            bst.remove(bst.get_root(), key);
+        } else if(a == 4){
+            bst.display();
+        } else if(a == 5){
+            system("clear");
+        } else if(a == 6){
+            break;
+        } 
+        else{
+            printf("잘못된 입력입니다.\n");
+        }
+    }
 
-    node = bst.search(15);
-    std::cout << "parent key: " << node.first->key << '\n';
-    std::cout << "current key: " << node.second->key << '\n';
-
-    // node = bst.search(100);
-    // if(node.second == NULL){
-    //     std::cout << "not found\n";
-    //     return -1;
-    // }
-    // std::cout << "parent key: " << node.first->key << '\n';
-    // std::cout << "current key: " << node.second->key << '\n';
-
-    bst.insert(20);
-    node = bst.search(20);
-    std::cout << "parent key: " << node.first->key << '\n';
-    std::cout << "current key: " << node.second->key << '\n';
     return 0;
 }
