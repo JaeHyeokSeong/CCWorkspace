@@ -1,16 +1,32 @@
 #include <iostream>
-#include <cassert>
-int get_score(){
-    int score;
-    std::cout << "점수를 입력해주세요 : ";
-    assert(score >= 0); 
-    // score가 0보다 작은면 assert함수 실행
-    std::cin >> score;
-    return score;
-}
+
+class Person{
+    private:
+        int age;
+        const char* name;
+    public:
+        Person(){
+            name = "unkown";
+            age = 0;
+        }
+        Person(const char* name, const int age){
+            this->name = name;
+            this->age = age;
+        }
+        void get_info() const{
+            printf("name: %s, age: %d\n", name, age);
+        }
+};
 int main(){
-    while(1){
-        std::cout << "입력되어진 점수 : " << get_score() << '\n';
-    }
-    return 0;
+    Person person1;
+    person1 = Person("Jae", 23);
+    person1.get_info();
+
+    Person person2("JaeHyeok", 23);
+    person2.get_info();
+
+    Person* person3 = new Person("Seong Jae Hyeok", 23);
+    person3->get_info();
+    delete person3;
+    return 0;    
 }
