@@ -104,6 +104,7 @@ class Dll{
             if(current_node->privous_node == NULL && current_node->next_node == NULL){
                 current_node->next_node = created_node;
                 created_node->privous_node = current_node;
+                tail = created_node;
             }
             // index 가 tail 인 경우
             else if(current_node->privous_node != NULL && current_node->next_node == NULL){
