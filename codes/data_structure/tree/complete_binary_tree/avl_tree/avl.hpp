@@ -82,11 +82,32 @@ Node* get_max_node(Node* node){
     return node;
 }
 
+Node* insert_operation(Node* node, const int data){
+    if(node == NULL) {
+        node = get_new_node(data);
+    }
+    else if(node->data > data){
+        node->left = insert_operation(node->left, data);
+        node = adjust_balance(node);
+    }
+    else if(node->data < data){
+        node->right = insert_operation(node->right, data);
+        node = adjust_balance(node);
+    }
+    return node;
+}
+
 Node* remove_operation(Node* node, const int data){
     if(node == NULL) return NULL;
 
-    if(node->data > data) node->left = remove_operation(node->left, data);
-    else if(node->data < data) node->right = remove_operation(node->right, data);
+    if(node->data > data) {
+        node->left = remove_operation(node->left, data);
+        node = adjust_balance(node);
+    }
+    else if(node->data < data) {
+        node->right = remove_operation(node->right, data);
+        node = adjust_balance(node);
+    }
     else{
         Node* ptr = node;
         if(node->left == NULL && node->right == NULL){
@@ -115,6 +136,15 @@ void inorder_traversal(const Node* node){
     }
 }
 
+// test purpose
+void check_nodes_height_balance_factor(Node* node){
+    if(node != NULL){
+        check_nodes_height_balance_factor(node->left);
+        printf("data: %d, height: %d, balance factor: %d\n", node->data, get_height(node), get_balance_factor(node));
+        check_nodes_height_balance_factor(node->right);
+    }
+}
+
 class AVL{
     private:
         Node* root;
@@ -129,26 +159,10 @@ class AVL{
             return root;
         }
         void insert(const int data){
-            Node* node = get_new_node(data);
-            if(root == NULL) root = node;
-            else{
-                Node* ptr = root;
-                Node* p_ptr = NULL;
-                while(ptr != NULL){
-                    p_ptr = ptr;
-                    if(ptr->data > data) ptr = ptr->left;
-                    else if(ptr->data < data) ptr = ptr->right;
-                    else return; // 중복 값 허용 안됨
-                }
-                if(p_ptr->data > data) p_ptr->left = node;
-                else p_ptr->right = node;
-                // 균형도를 측정한다
-                root = adjust_balance(root);
-            }
+            root = insert_operation(root, data);
         }
         void remove(const int data){
             root = remove_operation(root, data);
-            root = adjust_balance(root);
         }
         bool search(const int data){
             Node* ptr = root;
@@ -162,17 +176,9 @@ class AVL{
         void show(){
             inorder_traversal(root);
             printf("\n");
+            check_nodes_height_balance_factor(root);
         }
 };
-
-// // test purpose
-// void check_nodes_height_balance_factor(Node* node){
-//     if(node != NULL){
-//         check_nodes_height_balance_factor(node->left);
-//         printf("data: %d, height: %d, balance factor: %d\n", node->data, get_height(node), get_balance_factor(node));
-//         check_nodes_height_balance_factor(node->right);
-//     }
-// }
 
 // // test purpose
 // void test(){
