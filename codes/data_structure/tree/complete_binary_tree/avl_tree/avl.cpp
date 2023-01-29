@@ -5,9 +5,13 @@
     [1] https://srdeveloper.tistory.com/29 (구현)
     [2] https://srdeveloper.tistory.com/28 (개념)
     [3] https://www.youtube.com/watch?v=9BiHgy40NNE&t=302s (개념)
+    [4] https://www.geeksforgeeks.org/deletion-in-an-avl-tree/
+        (adjust_balance에서 범위 고칠때 사용)
 */
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "avl-1.hpp"
 
 int read_input(std::string txt){
@@ -42,6 +46,23 @@ void test(){
         else if(input == -1) std::cout << "finished\n";
         else warning_message();
     }while(input != -1);
+}
+
+void test1(){
+    AVL avl;
+    std::srand((unsigned int)time(NULL));
+    int count = 100000;
+    int range = 1000000;
+    for(int i = 0; i < count; i++){
+        avl.insert(rand() % range);
+    }
+    avl.show();
+
+    count = 100000;
+    for(int i = 0; i < count; i++){
+        avl.remove(rand() % range);
+    }
+    avl.show();
 }
 
 int main(){

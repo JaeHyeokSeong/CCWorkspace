@@ -71,13 +71,13 @@ Node* RL(Node* node){
 
 Node* adjust_balance(Node* node){
     int balance_factor = get_balance_factor(node);
-    if(balance_factor >= 2){
+    if(balance_factor > 1){
         balance_factor = get_balance_factor(node->left);
-        if(balance_factor >= 1) node = LL(node);
+        if(balance_factor >= 0) node = LL(node);
         else node = LR(node);
-    } else if( balance_factor <= -2){
+    } else if( balance_factor < -1){
         balance_factor = get_balance_factor(node->right);
-        if(balance_factor <= -1) node = RR(node);
+        if(balance_factor <= 0) node = RR(node);
         else node = RL(node);
     }
     return node;
@@ -101,10 +101,8 @@ Node* remove_operation(Node* node, const int data){
     
     if(node->data > data){
         node->left = remove_operation(node->left, data);
-        node = adjust_balance(node);
     } else if(node->data < data){
         node->right = remove_operation(node->right, data);
-        node = adjust_balance(node);
     } else{
         Node* ptr = node;
         if(node->left == NULL && node->right == NULL){
@@ -138,8 +136,8 @@ Node* remove_operation(Node* node, const int data){
                 이 된다. 따라서 5 (node) 의 균형도를 재조정 해야한다.
             */
         }
-        node = adjust_balance(node);
     }
+    node = adjust_balance(node);
     return node;
 }
 
