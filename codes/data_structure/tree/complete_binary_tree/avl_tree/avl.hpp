@@ -123,6 +123,7 @@ Node* remove_operation(Node* node, const int data){
             ptr = get_max_node(node->left);
             node->data = ptr->data;
             node->left = remove_operation(node->left, ptr->data);
+            node = adjust_balance(node);
         }
     }
     return node;
