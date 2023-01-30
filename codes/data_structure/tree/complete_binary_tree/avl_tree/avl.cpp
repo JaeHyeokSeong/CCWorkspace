@@ -12,7 +12,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include "avl-1.hpp"
+#include "avl-2.hpp"
 
 int read_input(std::string txt){
     int input;
@@ -53,12 +53,12 @@ void test1(){
     std::srand((unsigned int)time(NULL));
     int count = 100000;
     int range = 1000000;
+    std::cout << "after inserting\n";
     for(int i = 0; i < count; i++){
         avl.insert(rand() % range);
     }
     avl.show();
-
-    count = 100000;
+    std::cout << "\nafter removing\n";
     for(int i = 0; i < count; i++){
         avl.remove(rand() % range);
     }
@@ -66,7 +66,7 @@ void test1(){
 }
 
 int main(){
-    test();
+    test1();
     
     return 0;
 }
