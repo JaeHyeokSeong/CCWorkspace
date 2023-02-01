@@ -39,9 +39,10 @@ void test(){
 
 void test1(){
     AVL avl;
+    std::string file_name = "removed_data_records.txt";
     std::srand((unsigned int)time(NULL));
-    int count = 50000000;
-    int range = 50000000;
+    int count = 100000000;
+    int range = 1000000000;
 
     std::cout << "after inserting\n";
     for(int i = 0; i < count; i++){
@@ -50,11 +51,32 @@ void test1(){
     avl.show();
 
     std::cout << "\nafter removing\n";
+    std::ofstream file_out;
+    file_out.open(file_name, std::ios_base::app);
     for(int i = 0; i < count; i++){
-        avl.remove(rand() % range);
+        int data = rand() % range;
+        avl.remove(data);
+        file_out << data << '\n';
     }
+    file_out.close();
     avl.show();
     std::cout << "total removed node numbers: " << count_removed_nodes << '\n';
+    system("open ./removed_data_records.txt");
+    int input = 0;
+    do{ 
+        menu();
+        input = read_input("enter number: ");
+        if(input == 0) avl.show();
+        else if(input == 1) avl.insert(read_input("enter data: "));
+        else if(input == 2) avl.remove(read_input("enter data: "));
+        else if(input == 3){
+            if(avl.search(read_input("enter data: "))) std::cout << "found\n";
+            else std::cout<< "not found\n";
+        }
+        else if(input == 4) system("clear");
+        else if(input == -1) std::cout << "finished\n";
+        else warning_message();
+    }while(input != -1);
 }
 
 int main(){
